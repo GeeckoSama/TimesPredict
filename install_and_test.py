@@ -52,11 +52,12 @@ def check_python_version():
     version = sys.version_info
     print(f"Python {version.major}.{version.minor}.{version.micro}")
     
-    if version.major == 3 and version.minor >= 11:
-        print("✅ Version Python compatible")
+    if version.major == 3 and version.minor in [10, 11]:
+        print("✅ Version Python compatible avec TimesFM")
         return True
     else:
-        print("❌ Python 3.11+ requis pour TimesFM")
+        print("❌ Python 3.10 ou 3.11 requis pour TimesFM")
+        print("   TimesFM ne supporte que Python 3.10-3.11 actuellement")
         return False
 
 

@@ -1,5 +1,9 @@
-# TimesFM - Modèle de base
-timesfm[torch]>=2.0.0
+# PyTorch - Dépendance essentielle pour TimesFM
+torch>=2.0.0
+
+# TimesFM - Installation depuis GitHub (plus stable)
+# timesfm[torch]==1.0.0  # Version PyPI problématique
+git+https://github.com/google-research/timesfm.git
 
 # Données et manipulation
 pandas>=2.0.0
