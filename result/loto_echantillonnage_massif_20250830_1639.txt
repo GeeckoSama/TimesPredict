@@ -1,0 +1,28 @@
+ÉCHANTILLONNAGE MASSIF LOTO - 30/08/2025 16:39
+======================================================================
+
+CONFIGURATION:
+  Nombre de prédictions: 100
+  Modèle: google/timesfm-2.0-500m-pytorch
+  Backend: cpu
+  Contexte: 2048 tirages
+
+COMBINAISON RECOMMANDÉE:
+  Boules: [1, 14, 21, 22, 42]
+  Numéro chance: 5
+  Fréquence: 1x sur 100 (1.0%)
+
+TOP 5 COMBINAISONS LES PLUS FRÉQUENTES:
+  #1: [1, 14, 21, 22, 42] + 5 → 1x (1.0%)
+  #2: [1, 13, 15, 20, 21] + 5 → 1x (1.0%)
+  #3: [1, 23, 25, 26, 37] + 9 → 1x (1.0%)
+  #4: [5, 24, 26, 27, 28] + 7 → 1x (1.0%)
+  #5: [2, 16, 19, 21, 27] + 7 → 1x (1.0%)
+
+STATISTIQUES:
+  Convergence: 1.0%
+  Diversité: 100.0%
+  Combinaisons uniques: 100/100
+
+IMPORTANT: Prédictions à usage éducatif uniquement.
+Aucune garantie de gain. Jouez avec modération.

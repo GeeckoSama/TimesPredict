@@ -1,1 +1,0 @@
-"""Scripts d'exemple pour TimesPredict"""

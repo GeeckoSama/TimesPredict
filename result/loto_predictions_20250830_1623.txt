@@ -1,0 +1,41 @@
+PRÉDICTIONS LOTO - 30/08/2025 16:23
+============================================================
+
+CONFIGURATION:
+  Modèle: google/timesfm-2.0-500m-pytorch
+  Backend: cpu
+  Mode: TimesFM
+
+PRÉDICTION TIMESFM DIRECTE:
+  Boules: [4, 19, 22, 25, 29]
+  Numéro chance: 5
+
+COMBINAISONS OPTIMISÉES:
+  #1 - Score: 0.857
+      Boules: [4, 19, 22, 25, 29]
+      Chance: 5
+      Méthode: timesfm_direct_main
+
+  #2 - Score: 0.834
+      Boules: [11, 19, 22, 25, 35]
+      Chance: 1
+      Méthode: hybrid_optimized_2
+
+  #3 - Score: 0.834
+      Boules: [4, 11, 22, 25, 35]
+      Chance: 5
+      Méthode: hybrid_optimized_5
+
+  #4 - Score: 0.832
+      Boules: [4, 11, 19, 29, 35]
+      Chance: 1
+      Méthode: hybrid_optimized_3
+
+  #5 - Score: 0.832
+      Boules: [4, 11, 19, 29, 35]
+      Chance: 5
+      Méthode: hybrid_optimized_4
+
+
+IMPORTANT: Prédictions à usage éducatif uniquement.
+Aucune garantie de gain. Jouez avec modération.
