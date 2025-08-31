@@ -188,16 +188,6 @@ models_cache/
 checkpoints/
 wandb/
 
-# Data files
-data/raw/
-data/processed/
-*.csv
-*.json
-*.xlsx
-*.parquet
-*.feather
-*.hdf5
-*.h5
 
 # Logs and outputs
 logs/
