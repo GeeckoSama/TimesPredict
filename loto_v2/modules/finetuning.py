@@ -72,32 +72,108 @@ class LotoFineTuner:
         self.backend_config = self._detect_optimal_backend()
     
     def _detect_optimal_backend(self):
-        """Détecte automatiquement le meilleur backend (GPU si disponible)"""
-        # Détection Mac M4 Pro avec MPS
+        """Détecte automatiquement le meilleur backend selon le hardware"""
+        
+        # 1. Détection NVIDIA GPU (RTX 4080, etc.) avec CUDA
+        if torch.cuda.is_available():
+            gpu_count = torch.cuda.device_count()
+            gpu_name = torch.cuda.get_device_name(0) if gpu_count > 0 else "Unknown"
+            
+            try:
+                # Test d'allocation CUDA
+                device = torch.device("cuda:0")
+                test_tensor = torch.rand(1000, 1000, device=device)
+                memory_gb = torch.cuda.get_device_properties(0).total_memory / 1e9
+                del test_tensor
+                
+                print(f"🚀 GPU NVIDIA détecté : {gpu_name}")
+                print(f"   💾 VRAM : {memory_gb:.1f} GB")
+                print(f"   ⚡ CUDA {torch.version.cuda}")
+                
+                # Configuration optimisée selon la VRAM
+                if memory_gb >= 16:  # RTX 4080 Super ou mieux
+                    batch_size = 16
+                    print("   🔧 Configuration haute performance (16GB+ VRAM)")
+                elif memory_gb >= 12:  # RTX 4080, 4070 Ti
+                    batch_size = 12
+                    print("   🔧 Configuration optimisée (12GB+ VRAM)")
+                elif memory_gb >= 8:   # RTX 4070, 4060 Ti
+                    batch_size = 8
+                    print("   🔧 Configuration standard (8GB+ VRAM)")
+                else:  # RTX 4060, plus anciens
+                    batch_size = 4
+                    print("   🔧 Configuration conservatrice (<8GB VRAM)")
+                
+                return {
+                    "backend": "gpu",
+                    "device": "cuda",
+                    "device_name": gpu_name,
+                    "memory_gb": memory_gb,
+                    "batch_size": batch_size,
+                    "use_gpu": True,
+                    "gpu_type": "nvidia_cuda"
+                }
+            except Exception as e:
+                print(f"⚠️  Erreur test CUDA: {e}")
+        
+        # 2. Détection Apple Silicon (Mac M1, M2, M3, M4) avec MPS
         if platform.machine() == 'arm64' and hasattr(torch, 'mps'):
             if torch.mps.is_available():
                 try:
-                    # Test rapide d'allocation GPU
+                    # Test d'allocation MPS
                     device = torch.device("mps")
-                    test_tensor = torch.rand(10, 10, device=device)
+                    test_tensor = torch.rand(1000, 1000, device=device)
                     del test_tensor
-                    print("🚀 GPU Mac M4 Pro détecté - utilisation MPS")
+                    
+                    # Détection du modèle de Mac
+                    mac_model = "Apple Silicon"
+                    if "M4" in platform.processor() or "m4" in platform.processor().lower():
+                        mac_model = "Mac M4 Pro"
+                        batch_size = 6  # M4 Pro optimisé
+                    elif "M3" in platform.processor() or "m3" in platform.processor().lower():
+                        mac_model = "Mac M3"
+                        batch_size = 5  # M3 optimisé
+                    elif "M2" in platform.processor() or "m2" in platform.processor().lower():
+                        mac_model = "Mac M2"
+                        batch_size = 4  # M2 standard
+                    else:
+                        batch_size = 4  # M1 ou autre
+                    
+                    print(f"🚀 GPU {mac_model} détecté - utilisation MPS")
+                    print("   ⚡ Metal Performance Shaders")
+                    
                     return {
                         "backend": "gpu",
-                        "device": "mps", 
-                        "batch_size": 4,
-                        "use_gpu": True
+                        "device": "mps",
+                        "device_name": mac_model,
+                        "batch_size": batch_size,
+                        "use_gpu": True,
+                        "gpu_type": "apple_mps"
                     }
-                except:
-                    pass
+                except Exception as e:
+                    print(f"⚠️  Erreur test MPS: {e}")
         
-        # Fallback CPU
-        print("🖥️  Utilisation CPU")
+        # 3. Fallback CPU avec optimisation selon les cœurs
+        cpu_count = torch.get_num_threads()
+        print(f"🖥️  Utilisation CPU ({cpu_count} threads)")
+        
+        # Batch size optimisé selon le nombre de cœurs CPU
+        if cpu_count >= 16:
+            batch_size = 12  # CPU haute performance (Ryzen 9, i9)
+        elif cpu_count >= 8:
+            batch_size = 8   # CPU standard (Ryzen 7, i7)
+        elif cpu_count >= 4:
+            batch_size = 6   # CPU basique (Ryzen 5, i5)
+        else:
+            batch_size = 4   # CPU faible
+        
         return {
             "backend": "cpu",
             "device": "cpu",
-            "batch_size": 8,
-            "use_gpu": False
+            "device_name": f"CPU {cpu_count} threads",
+            "batch_size": batch_size,
+            "use_gpu": False,
+            "gpu_type": "cpu"
         }
         
     def load_base_model(self) -> bool:

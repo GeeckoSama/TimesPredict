@@ -62,6 +62,21 @@ class LotoV2CLI:
                 print(f"   🤖 Fine-tuning: ✅ Modèle prêt")
         else:
             print(f"   🤖 Fine-tuning: ❌ Non effectué")
+        
+        # Statut hardware détecté
+        hw_config = self.fine_tuner.backend_config
+        print(f"\n🔧 Hardware détecté:")
+        if hw_config['gpu_type'] == 'nvidia_cuda':
+            print(f"   🚀 GPU: {hw_config['device_name']}")
+            if 'memory_gb' in hw_config:
+                print(f"   💾 VRAM: {hw_config['memory_gb']:.1f} GB")
+            print(f"   ⚡ CUDA avec batch size {hw_config['batch_size']}")
+        elif hw_config['gpu_type'] == 'apple_mps':
+            print(f"   🍎 GPU: {hw_config['device_name']}")
+            print(f"   ⚡ MPS avec batch size {hw_config['batch_size']}")
+        else:
+            print(f"   🖥️  CPU: {hw_config['device_name']}")
+            print(f"   🔧 Batch size {hw_config['batch_size']}")
     
     def display_menu(self):
         """Affiche le menu principal"""
