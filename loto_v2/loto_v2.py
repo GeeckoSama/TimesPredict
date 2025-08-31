@@ -146,9 +146,9 @@ class LotoV2CLI:
             n_str = input("\n📊 Nombre de prédictions (défaut: 100): ").strip()
             n_predictions = int(n_str) if n_str else 100
             
-            if n_predictions < 10 or n_predictions > 1000:
-                print("⚠️  Nombre limité entre 10 et 1000")
-                n_predictions = min(max(n_predictions, 10), 1000)
+            if n_predictions < 1:
+                print("⚠️  Minimum 1 prédiction")
+                n_predictions = 1
             
             has_finetuned = self.storage.load_model() is not None
             results = self.validator.generate_prediction_series(
